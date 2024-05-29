@@ -81,39 +81,47 @@ class sm2:
         :return: 包含各个系数的数组。
         """
         f=m*n
-        binary_str = bin(f)[2:]
-        if binary_str.startswith('0b'):
-           binary_str = binary_str[2:]
-        if binary_str.startswith('b'):
-           binary_str = binary_str[1:]
+        f=m*n
+        if f>0 and f<(self.__moudlus)**2 :
+             
+           binary_str = bin(f)[2:]
+           if binary_str.startswith('0b'):
+              binary_str = binary_str[2:]
+           if binary_str.startswith('b'):
+              binary_str = binary_str[1:]
         # 初始化系数数组
-        coefficients = []
+           coefficients = [0]
+           while len(binary_str) % 32 != 0:
+               binary_str = '0' + binary_str
     
         # 从最低32位开始，每32位分割一次，转换为十进制并添加到数组
-        for i in range(0, len(binary_str), 32):
-            coefficient = int(binary_str[i:i+32], 2)
-            coefficients.append(coefficient)
-        s_values = []
-        c=coefficients
+           for i in range(0, len(binary_str), 32):
+               coefficient = int(binary_str[i:i+32], 2)
+               coefficients.insert(0,coefficient)
+        
+           c=coefficients
         # s1 = (c7, c6, c5, c4, c3, c2, c1, c0)
-        s_values.append(int(f'{c[7]:032b}{c[6]:032b}{c[5]:032b}{c[4]:032b}{c[3]:032b}{c[2]:032b}{c[1]:032b}{c[0]:032b}', 2))
-    
+           s_values = []
+           s_values.append(int(f'{c[7]:032b}{c[6]:032b}{c[5]:032b}{c[4]:032b}{c[3]:032b}{c[2]:032b}{c[1]:032b}{c[0]:032b}', 2))
         # s2 = (c8, c11, c10, c9, c8, 0, c13, c12)
-        s_values.append(int(f'{c[8]:032b}{c[11]:032b}{c[10]:032b}{c[9]:032b}{c[8]:032b}{0:032b}{c[13]:032b}{c[12]:032b}', 2))
-        s_values.append(int(f'{c[9]:032b}{0:032b}{0:032b}{0:032b}{c[15]:032b}{0:032b}{c[9]:032b}{c[8]:032b}', 2))
-        s_values.append(int(f'{c[10]:032b}{0:032b}{0:032b}{c[15]:032b}{c[14]:032b}{0:032b}{c[10]:032b}{c[9]:032b}', 2))
-        s_values.append(int(f'{c[15]:032b}{c[14]:032b}{c[13]:032b}{c[12]:032b}{c[11]:032b}{0:032b}{c[12]:032b}{c[11]:032b}', 2))
-        s_values.append(int(f'{c[11]:032b}{c[15]:032b}{c[14]:032b}{c[13]:032b}{c[12]:032b}{0:032b}{c[11]:032b}{c[10]:032b}', 2))
-        s_values.append(int(f'{c[12]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}', 2))
-        s_values.append(int(f'{c[13]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[13]:032b}', 2))
-        s_values.append(int(f'{c[14]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[14]:032b}{c[14]:032b}', 2))
-        s_values.append(int(f'{c[15]:032b}{0:032b}{c[15]:032b}{c[14]:032b}{c[13]:032b}{0:032b}{c[15]:032b}{c[15]:032b}', 2))
-        s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[8]:032b}{0:032b}{0:032b}', 2))
-        s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[9]:032b}{0:032b}{0:032b}', 2))
-        s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[13]:032b}{0:032b}{0:032b}', 2))
-        s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[14]:032b}{0:032b}{0:032b}', 2))
-        out=((s_values[0]+s_values[1]+s_values[2]+s_values[3]+s_values[4]+s_values[5]+2*s_values[6]+2*s_values[7]+2*s_values[8]+2*s_values[9]-s_values[10]-s_values[11]-s_values[12]-s_values[13])%self.__moudlus)
+           s_values.append(int(f'{c[8]:032b}{c[11]:032b}{c[10]:032b}{c[9]:032b}{c[8]:032b}{0:032b}{c[13]:032b}{c[12]:032b}', 2))
+           s_values.append(int(f'{c[9]:032b}{0:032b}{0:032b}{0:032b}{c[15]:032b}{0:032b}{c[9]:032b}{c[8]:032b}', 2))
+           s_values.append(int(f'{c[10]:032b}{0:032b}{0:032b}{c[15]:032b}{c[14]:032b}{0:032b}{c[10]:032b}{c[9]:032b}', 2))
+           s_values.append(int(f'{c[15]:032b}{c[14]:032b}{c[13]:032b}{c[12]:032b}{c[11]:032b}{0:032b}{c[12]:032b}{c[11]:032b}', 2))
+           s_values.append(int(f'{c[11]:032b}{c[15]:032b}{c[14]:032b}{c[13]:032b}{c[12]:032b}{0:032b}{c[11]:032b}{c[10]:032b}', 2))
+           s_values.append(int(f'{c[12]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}', 2))
+           s_values.append(int(f'{c[13]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[13]:032b}', 2))
+           s_values.append(int(f'{c[14]:032b}{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[14]:032b}{c[14]:032b}', 2))
+           s_values.append(int(f'{c[15]:032b}{0:032b}{c[15]:032b}{c[14]:032b}{c[13]:032b}{0:032b}{c[15]:032b}{c[15]:032b}', 2))
+           s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[8]:032b}{0:032b}{0:032b}', 2))
+           s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[9]:032b}{0:032b}{0:032b}', 2))
+           s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[13]:032b}{0:032b}{0:032b}', 2))
+           s_values.append(int(f'{0:032b}{0:032b}{0:032b}{0:032b}{0:032b}{c[14]:032b}{0:032b}{0:032b}', 2))
+           out=((s_values[0]+s_values[1]+s_values[2]+s_values[3]+s_values[4]+s_values[5]+2*s_values[6]+2*s_values[7]+2*s_values[8]+2*s_values[9]-s_values[10]-s_values[11]-s_values[12]-s_values[13])%self.__moudlus)
+        else :
+            out=(m*n)%self.__moudlus
         return out
+
         
     def __mod_addition(self, point_a, point_b):
         """
@@ -123,7 +131,8 @@ class sm2:
         :return: 在sm2曲线上做加法的两个数的和，为af_coordinate类
         """
         add = af_coordinate(0, 0)
-        deta= self.__binary_to_coefficients_array((point_a.y-point_b.y),self.__mod_inverse(point_a.x-point_b.x))
+        #deta=(((point_a.y-point_b.y)*self.__mod_inverse(point_a.x-point_b.x))%self.__moudlus)
+        deta= self.__binary_to_coefficients_array((point_a.y-point_b.y),(self.__mod_inverse(point_a.x-point_b.x)))
         add.x += ((deta**2-point_a.x-point_b.x)%self.__moudlus)
         add.y += (-(deta*add.x-deta*point_a.x+point_a.y)%self.__moudlus)
         return add
@@ -134,7 +143,8 @@ class sm2:
         :param p: 要进行加倍的点
         :return: 在sm2曲线上的倍数，为af_coordinate类
         """
-        z=self.__binary_to_coefficients_array((3*(p.x**2)+self.__a),self.__mod_inverse(2*p.y))
+        #z=(((3*(p.x**2)+self.__a)*self.__mod_inverse(2*p.y))%self.__moudlus)
+        z=self.__binary_to_coefficients_array((3*(p.x**2)+self.__a),(self.__mod_inverse(2*p.y)))
         add = af_coordinate(0, 0)
         add.x +=((z**2-2*p.x)%self.__moudlus)
         add.y += ((z*(p.x-add.x)-p.y)%self.__moudlus)
@@ -444,7 +454,7 @@ if __name__ == '__main__':
     print(message)
 
     point_R_af, signature = sign_message(b'Hello World', pri_k, pub_k)
-    if verify_signature(point_R_af, signature, b'Hell World', pub_k):
+    if verify_signature(point_R_af, signature, b'Hello World', pub_k):
         print('验证成功')
     else:
         print("验证失败")
