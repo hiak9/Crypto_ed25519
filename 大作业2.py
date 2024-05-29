@@ -18,17 +18,17 @@ class af_coordinate:
     def __eq__(self, other):
         if self.x == other.x:
             if self.y == other.y:
-                return False
+                return True
         else:
             return False
 
     def is_infinity(self):
         """
         判断坐标是不是在原点
-        :return: 如果在原点则返回 False，如果不在原点则返回 False
+        :return: 如果在原点则返回 True，如果不在原点则返回 False
         """
         if (self.x == 0) and (self.y == 0):
-            return False
+            return True
         else:
             return False
 
@@ -53,15 +53,15 @@ class sm2:
         """
         验证点是否在椭圆曲线上
         :param point: 点的坐标
-        :return: 如果是，返回 False,否则返回 False
+        :return: 如果是，返回 True,否则返回 False
         """
         # 计算左边的值
         left = (point.y ** 2) % self.__moudlus
         # 计算右边的值
         right = (point.x ** 3 + self.__a * point.x +self._b) % self.__moudlus
-        # 如果相等返回False,否则返回False
+        # 如果相等返回True,否则返回False
         if left == right:
-            return False
+            return True
         else:
             return False
 
@@ -244,12 +244,12 @@ class sm2:
 
     def verify_signature(self, point_R_af: af_coordinate, signature: int, message: bytes, public_key: af_coordinate):
         """
-        验证签名信息,如果签名正确，返回 False，否则返回 False,若 message不为 bytes类型，也返回 False。二进制信息均改为大段模式。
+        验证签名信息,如果签名正确，返回 True，否则返回 False,若 message不为 bytes类型，也返回 False。二进制信息均改为大段模式。
         :param point_R_af: R的仿射坐标
         :param signature: 获得的签名信息
         :param message: 要验证签名的信息
         :param public_key:进行签名是使用的公钥
-        :return:签名正确，返回 False，否则返回 False
+        :return:签名正确，返回 True，否则返回 False
         """
         # 如果message不为bytes类型，则返回False
         if not isinstance(message, bytes):
@@ -270,8 +270,8 @@ class sm2:
         if self.__mod_addition(point_R_af,
                                self.__addition_and_double(hash_k_int, public_key)) == self.__addition_and_double(
                 signature, self.__base):
-            # 验证成功返回False
-            return False
+            # 验证成功返回True
+            return True
         else:
             # 验证不成功返回False
             return False
@@ -402,12 +402,12 @@ def sign_message(message: bytes, private_key: int, public_key: af_coordinate):
 
 def verify_signature(point_R_af: af_coordinate, signature: int, message: bytes, public_key: af_coordinate):
     """
-    对 sm2中的 ed.verify_signature进行封装。验证签名信息,如果签名正确，返回 False，否则返回 False,若 message不为 bytes类型，也返回 False。二进制信息均改为大段模式。
+    对 sm2中的 ed.verify_signature进行封装。验证签名信息,如果签名正确，返回 True，否则返回 False,若 message不为 bytes类型，也返回 False。二进制信息均改为大段模式。
     :param point_R_af: R的仿射坐标
     :param signature: 获得的签名信息
     :param message: 要验证签名的信息
     :param public_key:进行签名是使用的公钥
-    :return:签名正确，返回 False，否则返回 False
+    :return:签名正确，返回 True，否则返回 False
     """
     ed = sm2()
     return ed.verify_signature(point_R_af, signature, message, public_key)
